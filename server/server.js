@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -8,8 +7,8 @@ const petRouter = require('./Routes/PetRoute');
 const AdoptFormRoute = require('./Routes/AdoptFormRoute');
 const AdminRoute = require('./Routes/AdminRoute');
 
-// Sequelize connection
-const sequelize = new Sequelize('pawfinds', 'root', 'yourpassword', {
+// Sequelize connection (no password)
+const sequelize = new Sequelize('pawfinds', 'root', '', {
   host: 'localhost',
   dialect: 'mysql'
 });
@@ -52,7 +51,7 @@ app.use('/form', AdoptFormRoute);
 app.use('/admin', AdminRoute);
 
 // Start server
-const PORT = process.env.PORT || 5000;
+const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

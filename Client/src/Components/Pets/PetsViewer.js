@@ -17,7 +17,10 @@ const PetsViewer = (props) => {
   return (
     <div className='pet-view-card'>
       <div className='pet-card-pic'>
-        <img src={`http://localhost:4000/images/${props.pet.filename}`} alt={props.pet.name} />
+        <img
+          src={`${process.env.REACT_APP_API}/images/${props.pet.filename}`}
+          alt={props.pet.name}
+        />
       </div>
       <div className='pet-card-details'>
         <h2>{props.pet.name}</h2>
@@ -27,12 +30,14 @@ const PetsViewer = (props) => {
         <p>{formatTimeAgo(props.pet.updatedAt)}</p>
       </div>
       <div className='show-interest-btn'>
-        <button onClick={togglePopup}>Show Interest <i className="fa fa-paw"></i></button>
+        <button onClick={togglePopup}>
+          Show Interest <i className="fa fa-paw"></i>
+        </button>
       </div>
       {showPopup && (
         <div className='popup'>
           <div className='popup-content'>
-            <AdoptForm closeForm={togglePopup} pet={props.pet}/>
+            <AdoptForm closeForm={togglePopup} pet={props.pet} />
           </div>
           <button onClick={togglePopup} className='close-btn'>
             Close <i className="fa fa-times"></i>
