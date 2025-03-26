@@ -1,19 +1,20 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { Sequelize } = require('sequelize');
+
+const sequelize = require('./config/sequelize');
 
 const petRouter = require('./Routes/PetRoute');
 const AdoptFormRoute = require('./Routes/AdoptFormRoute');
 const AdminRoute = require('./Routes/AdminRoute');
 
-// Sequelize connection (no password)
-const sequelize = new Sequelize('pawfinds', 'root', '', {
-  host: 'localhost',
-  dialect: 'mysql'
-});
+// Import models to register them with Sequelize
+require('./models-mysql/User');
+require('./models-mysql/Pet');
+require('./models-mysql/AdoptionRequest');
+require('./models-mysql/Admin');
 
-// Test connection
 sequelize.authenticate()
   .then(() => {
     console.log('Connected to MySQL database');
@@ -22,13 +23,6 @@ sequelize.authenticate()
     console.error('Unable to connect to the database:', err);
   });
 
-// Import Sequelize models
-const User = require('./models-mysql/User');
-const Pet = require('./models-mysql/Pet');
-const AdoptionRequest = require('./models-mysql/AdoptionRequest');
-const Admin = require('./models-mysql/Admin');
-
-// Sync models with database
 sequelize.sync()
   .then(() => {
     console.log('Database synced with Sequelize models');
@@ -37,7 +31,6 @@ sequelize.sync()
     console.error('Error syncing models:', err);
   });
 
-// Initialize Express app
 const app = express();
 
 app.use(cors());
@@ -50,7 +43,6 @@ app.use(petRouter);
 app.use('/form', AdoptFormRoute);
 app.use('/admin', AdminRoute);
 
-// Start server
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
